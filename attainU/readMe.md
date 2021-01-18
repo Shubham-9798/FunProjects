@@ -1,22 +1,19 @@
-# NodeJSONMicroservice
+# ATTAINU
 This is a simple stateless microservice in Nodejs, with three major functionalities -
 - Authentication
-- JSON patching
+- Added UserAdress to mongodb database
+- JSON patching 
 - Image Thumbnail Generation
 
 ### Public Endpoints
 **Login**<br>
+Request:  POST, localhost:3000/api/users/login
 Request body contains an arbitrary username/password pair. (accept any username/password)
 A signed Json Web Token (https://jwt.io/) will be returned which can be used to validate future requests.
 
-### Private Endpoints
-**Apply Json Patch**<br>
-Request body contains a JSON object and a JSON patch object (http://jsonpatch.com/).
-service applies the json patch to the json object, and returns the resulting json object. 
-The service is first authorized with a JWT.
-
 **Create Thumbnail**<br>
 Request contains a public image URL.
+Request : POST, localhost:3000/api/users/image
 Service downloads the image, resize to 50x50 pixels, and store the resulting thumbnail in thumbnails folder.
 The service is first authorized with a JWT.
 
@@ -31,16 +28,17 @@ The service is first authorized with a JWT.
 - **Login**
   - Request Body -> { "username":"YOUR_USERNAME", "password":"YOUR_PASSWORD" }
   - Returned -> { "token":"YOUR_TOKEN" }
-- **JSON Patch**
+- **UserAddress**
   - Header -> Authorization : "Bearer YOUR_TOKEN"
-  - Request Body -> { "jsonObject": {JSON_OBJECT} , "jsonPatch": [{JSON_PATCH}] }
-  - Returned -> { "Patched":"JSON_OBJECT_WITH_PATCH" }
+  - Request Body ->  	"phoneNumber":" type: String",
+       "address1":" type: String",
+       "address2":" type: String",
+        "pin":" type: String"
+        }
+  - Returned -> { "token":"YOUR_TOKEN" }
 - **Thumbnail Creation**
   - Header -> Authorization : "Bearer YOUR_TOKEN"
   - Request Body -> { "url":"IMAGE_URL" }
   - Returned -> { "message":"RESPECTIVE_MESSAGE" }
   - Thumbnail stored in /public/images/thumbnail
   
-### Testing 
-Testing is done with **Mocha** and **Chai**. 
-And Istanbul (https://github.com/gotwarlost/istanbul) is used to generate code test coverage reports.
