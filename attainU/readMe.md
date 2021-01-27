@@ -2,7 +2,6 @@
 This is a simple stateless microservice in Nodejs, with three major functionalities -
 - Authentication
 - Added UserAdress to mongodb database
-- JSON patching 
 - Image Thumbnail Generation
 
 ### Public Endpoints
