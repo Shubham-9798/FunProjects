@@ -12,6 +12,8 @@ const app = express()
 var MongoClient = require('mongodb').MongoClient;
 var MONGODB_URL = process.env.MONGODB_URL;
 var mongoose = require("mongoose");
+let json = require('./cities.json')
+let SchemaCities = require('./model/cites')
 
 // Create a write stream
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'hackerbay.log'), {flags: 'a'})
@@ -27,14 +29,29 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(morgan('combined', { stream: accessLogStream }))
 
+function cities() {
+  var data = json
+  console.log(data);
+}
+cities()
+
+
+
+
+
 mongoose.set('useFindAndModify', false);
-mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(async () => {
 	//don't show the log when it is test
 	if(process.env.NODE_ENV !== "test") {
 		console.log("Connected to %s", MONGODB_URL);
 		console.log("App is running ... \n");
 		console.log("Press CTRL + C to stop the process. \n");
-	}
+  }
+
+  let response = await  SchemaCities.insertMany(json);
+  console.log(response)
+  
+
 })
 .catch(err => {
 	console.error("App starting error:", err.message);
